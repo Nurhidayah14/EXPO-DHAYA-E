@@ -10,6 +10,7 @@ export default function Index() {
           source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbzHznK5BSPwfzNFZLWC7HQkxWap_n4VEYbw&s' }}
           style={styles.image}
         />
+        <Text style={styles.label}>Nurhidayah</Text>
       </View>
 
       {/* Segitiga */}
@@ -28,6 +29,13 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
+  label: {
+  marginTop: 5,
+  fontSize: 14,
+  fontWeight: 'bold',
+  color: '#F5F5DC', // krem terang
+  },
+
   container: {
     flex: 1,
     backgroundColor: '#F0F0F0',
@@ -46,8 +54,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     borderRadius: 12,
   },
 
@@ -65,23 +73,25 @@ const styles = StyleSheet.create({
 
   pill: {
     backgroundColor: '#228B22', // Hijau daun
-    borderRadius: 60,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
+    borderRadius: 70,
+    paddingVertical: 10,
+    paddingHorizontal: 50,
+    justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 35,
   },
 
   emoji: {
-    fontSize: 40,
+    fontSize: 50,
     color: '#E0FFFF',
+    marginRight: 8,
   },
 
   stambuk: {
     color: '#D0F0FD',
     fontWeight: 'bold',
-    marginTop: 6,
-    fontSize: 16,
+    marginTop: 2,
+    fontSize: 20,
   },
 
   name: {
