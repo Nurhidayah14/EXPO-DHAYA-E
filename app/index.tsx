@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Dimensions,
   Image,
-  ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -38,7 +37,6 @@ const altImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpuUqPbUW21RoaisGUjW9daBV0XZwX2HJiwg&s=18',
 ];
 
-// Tipe state per gambar
 interface ImageState {
   isAlt: boolean;
   scale: number;
@@ -53,7 +51,7 @@ export default function GridGambar() {
     setImageStates((prevStates) =>
       prevStates.map((state, i) => {
         if (i !== index) return state;
-        const newScale = Math.min(state.scale + 0.2, 2);
+        const newScale = Math.min(state.scale * 1.2, 2);
         return {
           isAlt: !state.isAlt,
           scale: newScale,
@@ -62,34 +60,41 @@ export default function GridGambar() {
     );
   };
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {mainImages.map((main, index) => {
-        const imageUri = imageStates[index].isAlt ? altImages[index] : main;
+  const renderRows = () => {
+    const rows = [];
+    for (let i = 0; i < mainImages.length; i += 3) {
+      const rowItems = mainImages.slice(i, i + 3).map((_, j) => {
+        const index = i + j;
+        const imageUri = imageStates[index].isAlt ? altImages[index] : mainImages[index];
         const scaleStyle = { transform: [{ scale: imageStates[index].scale }] };
-
         return (
           <TouchableWithoutFeedback key={index} onPress={() => handlePress(index)}>
             <View style={styles.imageWrapper}>
-              <Image
-                source={{ uri: imageUri }}
-                style={[styles.image, scaleStyle]}
-                resizeMode="cover"
-              />
+              <Image source={{ uri: imageUri }} style={[styles.image, scaleStyle]} />
             </View>
           </TouchableWithoutFeedback>
         );
-      })}
-    </ScrollView>
-  );
+      });
+      rows.push(
+        <View key={i} style={styles.row}>
+          {rowItems}
+        </View>
+      );
+    }
+    return rows;
+  };
+
+  return <View style={styles.container}>{renderRows()}</View>;
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     padding: 5,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  row: {
+    flexDirection: 'row',
   },
   imageWrapper: {
     margin: 5,
