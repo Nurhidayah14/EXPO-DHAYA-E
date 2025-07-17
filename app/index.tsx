@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Dimensions,
   Image,
+  ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -11,7 +12,7 @@ const { width } = Dimensions.get('window');
 const numColumns = 3;
 const imageSize = width / numColumns - 10;
 
-// Gambar utama
+// 9 gambar utama (berbeda)
 const mainImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr1XsNfIizwWFEn88paZUMAPPbyrO-NN3pzg&s=1',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRXMTY9oIoj2sCREKMBhGV7IhHO5c1OidrRg&s=2',
@@ -24,7 +25,7 @@ const mainImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_2nbnqGo20fuq6Wbj_4qq_Efp6w3VuH-PEmXh0lJFRI59myPDEkzqrjWQGp7KFxpI51Y&usqp=CAU=9',
 ];
 
-// Gambar alternatif
+// 9 gambar alternatif (berbeda)
 const altImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDdyeAST_pagLDYl02LtEkGJCWoFJ1FdLdog&s=10',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd_mSy-TD-tUtVpxCL6Ri4sIO4C8xJ0wl77g&s=11',
@@ -37,6 +38,7 @@ const altImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpuUqPbUW21RoaisGUjW9daBV0XZwX2HJiwg&s=18',
 ];
 
+// State untuk masing-masing gambar
 interface ImageState {
   isAlt: boolean;
   scale: number;
@@ -51,7 +53,7 @@ export default function GridGambar() {
     setImageStates((prevStates) =>
       prevStates.map((state, i) => {
         if (i !== index) return state;
-        const newScale = Math.min(state.scale * 1.2, 2);
+        const newScale = Math.min(state.scale + 0.2, 2);
         return {
           isAlt: !state.isAlt,
           scale: newScale,
@@ -60,41 +62,39 @@ export default function GridGambar() {
     );
   };
 
-  const renderRows = () => {
-    const rows = [];
-    for (let i = 0; i < mainImages.length; i += 3) {
-      const rowItems = mainImages.slice(i, i + 3).map((_, j) => {
-        const index = i + j;
-        const imageUri = imageStates[index].isAlt ? altImages[index] : mainImages[index];
-        const scaleStyle = { transform: [{ scale: imageStates[index].scale }] };
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      {mainImages.map((main, index) => {
+        const imageSource = imageStates[index].isAlt
+          ? { uri: altImages[index] }
+          : { uri: main };
+
+        const scaleStyle = {
+          transform: [{ scale: imageStates[index].scale }],
+        };
+
         return (
           <TouchableWithoutFeedback key={index} onPress={() => handlePress(index)}>
             <View style={styles.imageWrapper}>
-              <Image source={{ uri: imageUri }} style={[styles.image, scaleStyle]} />
+              <Image
+                source={imageSource}
+                style={[styles.image, scaleStyle]}
+                resizeMode="cover"
+              />
             </View>
           </TouchableWithoutFeedback>
         );
-      });
-      rows.push(
-        <View key={i} style={styles.row}>
-          {rowItems}
-        </View>
-      );
-    }
-    return rows;
-  };
-
-  return <View style={styles.container}>{renderRows()}</View>;
+      })}
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     padding: 5,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  row: {
-    flexDirection: 'row',
   },
   imageWrapper: {
     margin: 5,
