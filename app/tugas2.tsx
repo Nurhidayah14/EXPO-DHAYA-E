@@ -1,55 +1,51 @@
 import React, { useState } from 'react';
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-
-const { width } = Dimensions.get('window');
-const numColumns = 3;
-const imageSize = width / numColumns - 10;
-
-const mainImages = [
-   'https://picsum.photos/id/1005/200',
-  'https://picsum.photos/id/1010/200',
-  'https://picsum.photos/id/1016/200',
-  'https://picsum.photos/id/1022/200',
-  'https://picsum.photos/id/1025/200',
-  'https://picsum.photos/id/1031/200',
-  'https://picsum.photos/id/1035/200',
-  'https://picsum.photos/id/1040/200',
-  'https://picsum.photos/id/1045/200',
-];
-
-const altImages = [
-  'https://picsum.photos/id/1060/200',
-  'https://picsum.photos/id/1061/200',
-  'https://picsum.photos/id/1062/200',
-  'https://picsum.photos/id/1063/200',
-  'https://picsum.photos/id/1064/200',
-  'https://picsum.photos/id/1065/200',
-  'https://picsum.photos/id/1066/200',
-  'https://picsum.photos/id/1067/200',
-  'https://picsum.photos/id/1068/200',
-];
+import { Image, Pressable, ScrollView, StyleSheet } from 'react-native';
 
 interface ImageState {
   isAlt: boolean;
   scale: number;
 }
 
-export default function Tugas2() {
+// Array URL gambar utama dan alternatif (9 gambar)
+const mainImages = [
+  'https://i.ibb.co/Ph0RPHy/1.png',
+  'https://i.ibb.co/fCfT6Tw/2.png',
+  'https://i.ibb.co/sK2YdtY/3.png',
+  'https://i.ibb.co/VwkHY2r/4.png',
+  'https://i.ibb.co/9yBL7rj/5.png',
+  'https://i.ibb.co/gZhHSp1/6.png',
+  'https://i.ibb.co/mCTvZHy/7.png',
+  'https://i.ibb.co/QpjvK66/8.png',
+  'https://i.ibb.co/djZCrKh/9.png',
+];
+
+const altImages = [
+  'https://i.ibb.co/0DZCWRx/1.png',
+  'https://i.ibb.co/tDk6D1z/2.png',
+  'https://i.ibb.co/PQyGbCr/3.png',
+  'https://i.ibb.co/3TNsydL/4.png',
+  'https://i.ibb.co/0ZPQ5Mw/5.png',
+  'https://i.ibb.co/p3PH7nk/6.png',
+  'https://i.ibb.co/9whCmzr/7.png',
+  'https://i.ibb.co/LvTjyr6/8.png',
+  'https://i.ibb.co/nB98zJ8/9.png',
+];
+
+const Tugas2 = () => {
+  // State untuk menyimpan apakah gambar menggunakan versi alternatif dan skala
   const [imageStates, setImageStates] = useState<ImageState[]>(
     mainImages.map(() => ({ isAlt: false, scale: 1 }))
   );
 
+  // Fungsi ketika gambar ditekan
   const handlePress = (index: number) => {
     setImageStates((prevStates) =>
       prevStates.map((item, i) => {
         if (i !== index) return item;
+
+        // Jika sudah skala maksimum (2), tidak ubah lagi
+        if (item.scale >= 2) return item;
+
         const newScale = Math.min(item.scale + 0.2, 2);
         return {
           isAlt: !item.isAlt,
@@ -61,47 +57,38 @@ export default function Tugas2() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {mainImages.map((main, index) => {
-        const imageSource = imageStates[index].isAlt
-          ? { uri: altImages[index] }
-          : { uri: main };
-
-        const scaleStyle = {
-          transform: [{ scale: imageStates[index].scale }],
-        };
+      {mainImages.map((_, index) => {
+        const { isAlt, scale } = imageStates[index];
+        const imageSource = isAlt ? altImages[index] : mainImages[index];
 
         return (
-          <TouchableWithoutFeedback key={index} onPress={() => handlePress(index)}>
-            <View style={styles.imageWrapper}>
-              <Image
-                source={imageSource}
-                style={[styles.image, scaleStyle]}
-                resizeMode="cover"
-              />
-            </View>
-          </TouchableWithoutFeedback>
+          <Pressable key={index} onPress={() => handlePress(index)}>
+            <Image
+              source={{ uri: imageSource }}
+              style={[styles.image, { transform: [{ scale }] }]}
+            />
+          </Pressable>
         );
       })}
     </ScrollView>
   );
-}
+};
+
+const imageSize = 100;
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 5,
+    padding: 10,
     justifyContent: 'center',
   },
-  imageWrapper: {
-    margin: 5,
+  image: {
     width: imageSize,
     height: imageSize,
-    overflow: 'hidden',
+    margin: 5,
+    borderRadius: 8,
   },
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
-  },
 });
+
+export default Tugas2;
