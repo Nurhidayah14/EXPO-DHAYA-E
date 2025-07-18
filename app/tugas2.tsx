@@ -8,10 +8,13 @@ import {
   View,
 } from 'react-native';
 
+// Hitung ukuran gambar agar membentuk grid 3x3
 const { width } = Dimensions.get('window');
 const numColumns = 3;
-const imageSize = width / numColumns - 10;
+const spacing = 10;
+const imageSize = width / numColumns - spacing * 2;
 
+// Daftar gambar utama dan alternatif
 const mainImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr1XsNfIizwWFEn88paZUMAPPbyrO-NN3pzg&s=1',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRXMTY9oIoj2sCREKMBhGV7IhHO5c1OidrRg&s=2',
@@ -36,21 +39,24 @@ const altImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpuUqPbUW21RoaisGUjW9daBV0XZwX2HJiwg&s=18',
 ];
 
+// Tipe data untuk tiap gambar
 interface ImageState {
-  isAlt: boolean;
-  scale: number;
+  isAlt: boolean; // apakah gambar sedang menampilkan versi alternatif?
+  scale: number;  // skala saat ini
 }
 
 export default function Tugas2() {
+  // Buat state untuk semua gambar
   const [imageStates, setImageStates] = useState<ImageState[]>(
     mainImages.map(() => ({ isAlt: false, scale: 1 }))
   );
 
+  // Handler saat gambar diklik
   const handlePress = (index: number) => {
     setImageStates((prevStates) =>
       prevStates.map((item, i) => {
-        if (i !== index) return item;
-        const newScale = Math.min(item.scale + 0.2, 2);
+        if (i !== index) return item; // gambar lain tetap
+        const newScale = Math.min(item.scale + 0.2, 2); // maksimum 2x
         return {
           isAlt: !item.isAlt,
           scale: newScale,
@@ -90,11 +96,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 5,
+    padding: spacing,
     justifyContent: 'center',
   },
   imageWrapper: {
-    margin: 5,
+    margin: spacing / 2,
     width: imageSize,
     height: imageSize,
     overflow: 'hidden',
@@ -102,6 +108,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 10,
-  },
+    borderRadius: 10,
+  },
 });
