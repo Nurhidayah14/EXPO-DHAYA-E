@@ -12,7 +12,6 @@ const { width } = Dimensions.get('window');
 const numColumns = 3;
 const imageSize = width / numColumns - 10;
 
-// 9 gambar utama (berbeda)
 const mainImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSr1XsNfIizwWFEn88paZUMAPPbyrO-NN3pzg&s=1',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRXMTY9oIoj2sCREKMBhGV7IhHO5c1OidrRg&s=2',
@@ -23,9 +22,9 @@ const mainImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2WHJgzaig4cgtcpPZYpGFeuu3KkX4q6WwcQ&s=7',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBdLuOIfj9QEk45q-9epbt-AGuLnnxoFnQRA&s=8',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_2nbnqGo20fuq6Wbj_4qq_Efp6w3VuH-PEmXh0lJFRI59myPDEkzqrjWQGp7KFxpI51Y&usqp=CAU=9',
+
 ];
 
-// 9 gambar alternatif (berbeda)
 const altImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDdyeAST_pagLDYl02LtEkGJCWoFJ1FdLdog&s=10',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd_mSy-TD-tUtVpxCL6Ri4sIO4C8xJ0wl77g&s=11',
@@ -36,26 +35,26 @@ const altImages = [
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM4yhOXh3_D00b9t-ew73CchdOYWjhxocIEg&s=16',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH4XYwcwAKjyriyZHcx4MQwmAlDH-53ExUUA&s=17',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpuUqPbUW21RoaisGUjW9daBV0XZwX2HJiwg&s=18',
+
 ];
 
-// State untuk masing-masing gambar
 interface ImageState {
   isAlt: boolean;
   scale: number;
 }
 
-export default function GridGambar() {
+export default function Tugas2() {
   const [imageStates, setImageStates] = useState<ImageState[]>(
     mainImages.map(() => ({ isAlt: false, scale: 1 }))
   );
 
   const handlePress = (index: number) => {
     setImageStates((prevStates) =>
-      prevStates.map((state, i) => {
-        if (i !== index) return state;
-        const newScale = Math.min(state.scale + 0.2, 2);
+      prevStates.map((item, i) => {
+        if (i !== index) return item;
+        const newScale = Math.min(item.scale + 0.2, 2);
         return {
-          isAlt: !state.isAlt,
+          isAlt: !item.isAlt,
           scale: newScale,
         };
       })
@@ -101,11 +100,10 @@ const styles = StyleSheet.create({
     width: imageSize,
     height: imageSize,
     overflow: 'hidden',
-    borderRadius: 10,
   },
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 10,
-  },
+    borderRadius: 10,
+  },
 });
